@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG Drawing Tool</title>
+  <style>
+    body { margin: 0; }
+    svg { border: 1px solid #ccc; width: 100vw; height: 100vh; cursor: crosshair; }
+  </style>
+</head>
+<body>
+  <svg id="canvas"></svg>
+
+  <script>
+    const svg = document.getElementById('canvas');
+    let rect = null;
+    let startX, startY;
+
+    svg.addEventListener('mousedown', e => {
+      startX = e.offsetX;
+      startY = e.offsetY;
+      rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", startX);
+      rect.setAttribute("y", startY);
+      rect.setAttribute("width", 0);
+      rect.setAttribute("height", 0);
+      rect.setAttribute("fill", "rgba(0, 0, 255, 0.3)");
+      rect.setAttribute("stroke", "blue");
+      svg.appendChild(rect);
+    });
+
+    svg.addEventListener('mousemove', e => {
+      if (!rect) return;
+      const width = e.offsetX - startX;
+      const height = e.offsetY - startY;
+      rect.setAttribute("width", Math.abs(width));
+      rect.setAttribute("height", Math.abs(height));
+      rect.setAttribute("x", width < 0 ? e.offsetX : startX);
+      rect.setAttribute("y", height < 0 ? e.offsetY : startY);
+    });
+
+    svg.addEventListener('mouseup', () => {
+      rect = null;
+    });
+  </script>
+</body>
+</html>
